@@ -1,0 +1,40 @@
+{
+  "write": {
+    "command": "display",
+    "version": "2.0",
+    "animType": "static",
+    "palette": [
+      {
+        "hue": 216,
+        "saturation": 2,
+        "brightness": 94,
+        "probability": 0.0
+      },
+      {
+        "hue": 130,
+        "saturation": 33,
+        "brightness": 91,
+        "probability": 0.0
+      },
+      {
+        "hue": 135,
+        "saturation": 67,
+        "brightness": 76,
+        "probability": 0.0
+      },
+      {
+        "hue": 135,
+        "saturation": 70,
+        "brightness": 63,
+        "probability": 0.0
+      },
+      {
+        "hue": 138,
+        "saturation": 70,
+        "brightness": 43,
+        "probability": 0.0
+      }
+    ],
+    "colorType": "HSB"
+  }
+}

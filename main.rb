@@ -9,7 +9,7 @@ require 'color_converter'
 require 'open-uri'
 
 colors = %w[#ebedf0 #9be9a8 #40c463 #30a14e #216e39s]
-panels = %w[14755 24134 7678 43428 12412 55637 36730 28113 25017]
+panels = ARGV
 data = []
 
 def fetch_var(name)

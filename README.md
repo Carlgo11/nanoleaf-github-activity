@@ -19,18 +19,18 @@ When you've received your API key, set it as the value for `NANOLEAF_TOKEN`.
 
 This program needs to know the order of your Canvas panels and their IDs.
 To get your panel IDs follow the instructions on [Postman #Layout](https://documenter.getpostman.com/view/1559645/RW1gEcCH#3eef67f5-8793-415e-ab09-53e75a2586c4)
+Add the panel IDs to `PANELS` in in reverse chronological order.
+
+Example:
+```SH
+PANEL="1001 1002 1003 1004"
+```
 
 ## Usage
 
-Open `run.sh` and replace the example panel ID list with your own. The panel IDs should be unquoted and in reverse chronological order.
-
-Then run `run.sh`:
 ```SH
-./run.sh
+docker run --env-file .env --network host -d carlgo11/nanoleaf
 ```
-
-This can also be done through a cronjob or similar.
-A good delay between executions seems to be between 15-30 minutes. 
 
 ## License
 

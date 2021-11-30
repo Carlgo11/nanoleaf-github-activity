@@ -23,13 +23,13 @@ Add the panel IDs to `PANELS` in in reverse chronological order.
 
 Example:
 ```SH
-PANEL="1001 1002 1003 1004"
+PANELS="1001 1002 1003 1004"
 ```
 
 ## Usage
 
 ```SH
-docker run --env-file .env --network host -d carlgo11/nanoleaf
+docker run --env-file .env carlgo11/nanoleaf
 ```
 
 ## License

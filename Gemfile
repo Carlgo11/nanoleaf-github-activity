@@ -2,5 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'nokogiri'
 gem 'color-converter'
+gem 'graphql-client'
+gem 'nokogiri'

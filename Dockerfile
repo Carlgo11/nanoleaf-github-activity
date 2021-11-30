@@ -7,7 +7,8 @@ RUN touch /var/log/nanoleaf; chown 1001 /var/log/nanoleaf
 WORKDIR /nanoleaf
 RUN chown 1001 .
 USER 1001
-COPY --chown=1001 ["main.rb", "Gemfile", "effect.json", "/nanoleaf/"]
+COPY --chown=1001 ["main.rb", "query.txt", "Gemfile", "effect.json", "/nanoleaf/"]
+ENV HOME="/tmp/"
 ENV GEM_HOME="/nanoleaf/vendor/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 RUN bundle install

@@ -6,49 +6,33 @@ require 'json'
 require 'uri'
 require 'net/http'
 require 'color_converter'
-require 'open-uri'
-require 'graphql/client'
-require 'graphql/client/http'
 require 'date'
+require 'open-uri'
+
+def colors
+  case Date.today.strftime('%m%d')
+  when '1031'
+    %w[#EBEDF0 #FDDF68 #FA7A18 #BD561D #631C03]
+  when '1225'
+    %w[#FFEBEB #FF7070 #FF3333 #D41111 #8F0000]
+  else
+    %w[#EBEDF0 #9BE9A8 #40C463 #30A14e #216E39]
+  end
+end
 
 def fetch_var(name)
-  throw("Set environment variable '#{name}'.") if ENV[name].nil?
-  ENV[name]
+  ENV[name].nil? ? throw("Set environment variable '#{name}'.") : ENV[name]
 end
 
-module Github
-  HTTP = GraphQL::Client::HTTP.new('https://api.github.com/graphql') do
-    def headers(_context)
-      { 'Authorization' => "Bearer #{fetch_var('GITHUB_TOKEN')}" }
-    end
-  end
-  Schema = GraphQL::Client.load_schema(HTTP)
-  Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
-  UserProfileQuery = Client.parse <<~'GRAPHQL'
-      query($from: DateTime, $to: DateTime) {
-      viewer {
-        contributionsCollection(from: $from, to: $to) {
-          contributionCalendar {
-            weeks {
-              contributionDays {
-                color
-                date
-              }
-            }
-          }
-        }
-      }
-    }
-  GRAPHQL
-
-  def self.query(from, to)
-    response = Client.query(UserProfileQuery, variables: { from: from, to: to })
-    raise response.errors[:data].join(', ') if response.errors.any?
-
-    response.data.viewer.contributions_collection.contribution_calendar.to_h
-  end
+def fetch_github_activity(length)
+  html = Nokogiri::HTML.parse(URI.open("https://github.com/#{fetch_var('GITHUB_USER')}"))
+  days = []
+  boxes = html.css('rect.ContributionCalendar-day')
+  boxes.each { |item| days << Integer(item['data-level']) unless item['data-date'].nil? }
+  days.last(length)
 end
 
+# Nanoleaf Canvas handling
 module Nanoleaf
   # rubocop:disable Metrics/AbcSize
   def self.send(data)
@@ -76,12 +60,8 @@ end
 
 if Nanoleaf.on?
   panels = fetch_var('PANELS').split(' ')
-  github = Github.query((Date.now - panels.length), DateTime.now.iso8601)
+  github = fetch_github_activity(panels.length)
   data = []
-  days = {}
-  github['weeks'].each { |i| i['contributionDays'].each { |day| days[day['date']] = day['color'] } }
-  days = days.last(panels.length)
-  panels.each.with_index { |panel, day| data << "#{panel} 1 #{ColorConverter.rgb(days.values[day]).join(' ')} 0 5" }
-  puts data
+  panels.each.with_index { |panel, day| data << "#{panel} 1 #{ColorConverter.rgb(colors[github[day]]).join(' ')} 0 5" }
   Nanoleaf.send("#{panels.length} #{data.join(' ')}")
 end

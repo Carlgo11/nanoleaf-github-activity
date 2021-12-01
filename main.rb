@@ -1,13 +1,13 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'nokogiri'
 require 'json'
 require 'uri'
 require 'net/http'
 require 'color_converter'
 require 'date'
 require 'open-uri'
+require 'oga'
 
 def colors
   case Date.today.strftime('%m%d')
@@ -25,7 +25,7 @@ def fetch_var(name)
 end
 
 def fetch_github_activity(length)
-  html = Nokogiri::HTML.parse(URI.open("https://github.com/#{fetch_var('GITHUB_USER')}"))
+  html = Oga.parse_html(URI.open("https://github.com/#{fetch_var('GITHUB_USER')}"))
   days = []
   boxes = html.css('rect.ContributionCalendar-day')
   boxes.each { |item| days << Integer(item['data-level']) unless item['data-date'].nil? }

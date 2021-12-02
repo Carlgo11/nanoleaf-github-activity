@@ -1,13 +1,13 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'json'
-require 'uri'
-require 'net/http'
 require 'color_converter'
 require 'date'
-require 'open-uri'
+require 'json'
+require 'net/http'
 require 'oga'
+require 'open-uri'
+require 'uri'
 
 def colors
   case Date.today.strftime('%m%d')

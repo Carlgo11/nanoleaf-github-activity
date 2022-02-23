@@ -28,7 +28,9 @@ def fetch_github_activity(length)
   html = Oga.parse_html(URI.open("https://github.com/#{fetch_var('GITHUB_USER')}"))
   days = []
   boxes = html.css('rect.ContributionCalendar-day')
-  boxes.each { |item| days << Integer(item['data-level']) unless item['data-date'].nil? }
+  boxes.each do |item|
+    days << Integer(item['data-level']) unless item['data-date'].nil? || Date.parse(item['data-date']) > Date.today
+  end
   days.last(length)
 end
 

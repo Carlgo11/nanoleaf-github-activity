@@ -11,10 +11,14 @@ require 'uri'
 
 def colors
   case Date.today.strftime('%m%d')
+  when '0214'
+    %w[#FFEBEB #FF9898 #FF6363 #D41111 #8F0000]
   when '1031'
     %w[#EBEDF0 #FDDF68 #FA7A18 #BD561D #631C03]
+  when '1224'
+    %w[#FFEBEB #D41111 #D10000 #990000 #6F0000]
   when '1225'
-    %w[#FFEBEB #FF7070 #FF3333 #D41111 #8F0000]
+    %w[#FFEBEB #D41111 #D10000 #990000 #6F0000]
   else
     %w[#EBEDF0 #9BE9A8 #40C463 #30A14e #216E39]
   end

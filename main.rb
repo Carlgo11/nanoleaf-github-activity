@@ -33,9 +33,18 @@ def fetch_github_activity(length)
   days = []
   boxes = html.css('td.ContributionCalendar-day')
   boxes.each do |item|
-    days << Integer(item['data-level']) unless item['data-date'].nil? || Date.parse(item['data-date']) > Date.today
+    next if item['data-date'].nil? || Date.parse(item['data-date']) > Date.today
+
+    days << { date: Date.parse(item['data-date']), level: Integer(item['data-level']) }
   end
-  days.last(length)
+
+  # Sort the days array by the 'date' key in ascending order.
+  sorted_days = days.sort_by { |day| day[:date] }
+  p sorted_days.to_json
+  # Return the last 'length' data-level values from the sorted array.
+  last_days = sorted_days.last(length).map { |day| day[:level] }
+
+  last_days
 end
 
 # Nanoleaf Canvas handling

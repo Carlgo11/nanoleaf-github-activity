@@ -7,7 +7,7 @@ RUN apk add --no-cache make gcc libc-dev ruby-dev ruby-bundler && \
 WORKDIR /nanoleaf
 RUN chown 1001 .
 USER 1001
-COPY --chown=1001 ["main.rb", "Gemfile", "effect.json", "/nanoleaf/"]
+COPY --chown=1001 ["main.rb", "Gemfile", "effect.json", "colors.json", "/nanoleaf/"]
 ENV HOME="/tmp/"
 ENV GEM_HOME="/nanoleaf/vendor/bundle"
 RUN bundle install --jobs=4

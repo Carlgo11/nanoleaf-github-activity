@@ -39,8 +39,9 @@ def fetch_var(name)
 end
 
 def fetch_github_activity(length)
-  days = Oga.parse_html(URI.open("https://github.com/#{fetch_var('GITHUB_USER')}")).css('td.ContributionCalendar-day')
-  days.map do |item|
+  boxes = Oga.parse_html(URI.open("https://github.com/#{fetch_var('GITHUB_USER')}")).css('td.ContributionCalendar-day')
+  days = []
+  boxes.map do |item|
     next if item['data-date'].nil? || Date.parse(item['data-date']) > Date.today
 
     days << { date: Date.parse(item['data-date']), level: Integer(item['data-level']) }
@@ -88,6 +89,7 @@ if Nanoleaf.on?
   github = fetch_github_activity(panels.length)
   data = []
   panels.each.with_index { |panel, day| data << "#{panel} 1 #{ColorConverter.rgb(colors[github[day]]).join(' ')} 0 5" }
+  p data
   Nanoleaf.send("#{panels.length} #{data.join(' ')}")
 end
 

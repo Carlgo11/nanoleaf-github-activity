@@ -59,14 +59,16 @@ module Nanoleaf
     "http://#{fetch_var('NANOLEAF_HOST')}/api/v1/#{fetch_var('NANOLEAF_TOKEN')}"
   end
 
-  def self.effect
-    JSON.parse(File.read('effect.json'))
+  def self.effect(data)
+    effect = JSON.parse(File.read('effect.json'))
+    effect['write']['animData'] = data
+    effect
   end
 
   def self.send(data)
     url = URI("#{api_url}/effects")
     request = Net::HTTP::Put.new(url)
-    request.body = JSON.generate(effect['write']['animData'] = data)
+    request.body = JSON.generate(effect(data))
     response = Net::HTTP.new(url.host, url.port).start { |http| http.request(request) }
     throw("Unable to change colors (#{response.code})") unless response.code.eql?('204')
   end
@@ -89,7 +91,6 @@ if Nanoleaf.on?
   github = fetch_github_activity(panels.length)
   data = []
   panels.each.with_index { |panel, day| data << "#{panel} 1 #{ColorConverter.rgb(colors[github[day]]).join(' ')} 0 5" }
-  p data
   Nanoleaf.send("#{panels.length} #{data.join(' ')}")
 end
 
